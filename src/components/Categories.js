@@ -1,3 +1,8 @@
+export function randomCategory() {
+  return categories[Math.round(Math.random() * (categories.length - 1))]
+}
+
+
 const categories = [
 
 "Musical Artists",
@@ -13,10 +18,4 @@ const categories = [
 "Animals",
 "Food",
 "Games",
-
 ]
-
-
-export function randomCategory() {
-  return categories[Math.round(Math.random() * (categories.length - 1))]
-}
