@@ -12,6 +12,7 @@ class SinglePlayer extends Component {
         category: randomCategory(),
         previousAnswer: '',
         alreadyGuessed: [],
+        flavorText: 'Your turn!'
       }
 
 
@@ -21,16 +22,39 @@ class SinglePlayer extends Component {
 
 
     let previousAnswer = (this.state.previousAnswer)
-    if (answer[0] === previousAnswer[previousAnswer.length - 1] || previousAnswer === '') {
+    let previousAnswerLastIndex = previousAnswer.length - 1
+    // console.log(answer[0])
+    // console.log(previousAnswer[previousAnswerLastIndex])
+
+    // if (answer.includes('THE ') || answer.includes('AN ') || (answer[0] === 'A' && answer[1] === ' ')) {
+
+    // this code is broken for now but will be fixed soon
+
+    if (answer[0] === previousAnswer[previousAnswerLastIndex] || previousAnswer === '') {
+
       console.log("this code works!")
-    } else {
+      this.setState({ previousAnswer: answer,
+                      alreadyGuessed: [...this.state.alreadyGuessed, answer],
+                      flavorText: "Nice one!",
+                    })
+    } else if (answer.includes('THE ', 0)) {
+      console.log("okay so this code works")
+
+    }
+
+
+
+
+
+
+    else {
       console.log("try again, idiot!")
     }
 
     console.log(answer)
     console.log(this.state.previousAnswer)
 
-    this.setState({ previousAnswer: answer })
+
 
 
 
@@ -52,6 +76,9 @@ class SinglePlayer extends Component {
 
         <div><Form answerCheck={this.answerCheck} /></div>
 
+        <div>{this.state.flavorText}</div>
+
+        <div>{this.state.alreadyGuessed}</div>
 
       </div>
 
