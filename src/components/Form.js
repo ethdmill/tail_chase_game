@@ -10,22 +10,18 @@ class Form extends Component {
     }
   }
 
+  // Sets state of answer to any text input in form field
   handleChange = event => {
     this.setState({ answer: event.target.value })
   }
 
-
-
-
+  // Creates answer variable and runs main game functions upon submitting text
   handleSubmit = event => {
     event.preventDefault()
     this.setState({ answer: '' })
     let answer = (this.state.answer).toUpperCase()
-    this.props.answerCheck(answer)
+    this.props.articleCheck(answer)
   }
-
-
-
 
 
   render() {
@@ -41,7 +37,9 @@ class Form extends Component {
               onChange={this.handleChange}
             />
           </div>
-          {/* submit button disabling thing goes here */}
+          <div className="pt-2 mb-2">
+            <button type="submit" value="Submit">Submit</button>
+          </div>
         </form>
       </div>
     )

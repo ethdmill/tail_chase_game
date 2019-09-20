@@ -8,86 +8,87 @@ class SinglePlayer extends Component {
   constructor() {
     super()
       this.state = {
-        // status: playing,
         category: randomCategory(),
         previousAnswer: '',
+        correct: true,
         alreadyGuessed: [],
-        flavorText: 'Your turn!'
+        flavorText: 'Your turn!',
+        articleText: '',
+        hasArticle: false,
       }
-
-
   }
 
-  answerCheck = (answer) => {
-
-
+  // Checks answer and stores object to be used as state later -- also stores previous answer to allow continual gameplay
+  answerCheck = (answer, startIndex) => {
     let previousAnswer = (this.state.previousAnswer)
     let previousAnswerLastIndex = previousAnswer.length - 1
-    // console.log(answer[0])
-    // console.log(previousAnswer[previousAnswerLastIndex])
+    let tempState = {}
 
-    // if (answer.includes('THE ') || answer.includes('AN ') || (answer[0] === 'A' && answer[1] === ' ')) {
-
-    // this code is broken for now but will be fixed soon
-
-    if (answer[0] === previousAnswer[previousAnswerLastIndex] || previousAnswer === '') {
-
-      console.log("this code works!")
-      this.setState({ previousAnswer: answer,
-                      alreadyGuessed: [...this.state.alreadyGuessed, answer],
-                      flavorText: "Nice one!",
-                    })
-    } else if (answer.includes('THE ', 0)) {
-      console.log("okay so this code works")
-
+    if (answer === '') {
+      tempState = { flavorText: "Please enter an answer!" }
+    } else if (this.state.alreadyGuessed.includes(answer)) {
+      tempState = { flavorText: "That one was already guessed!" }
+    } else if (answer[startIndex] === previousAnswer[previousAnswerLastIndex] || previousAnswer === '') {
+      tempState = {
+        previousAnswer: answer,
+        correct: true,
+        alreadyGuessed: [...this.state.alreadyGuessed, answer],
+        flavorText: "Nice one!",
+      }
+    } else {
+      tempState = {
+        correct: false,
+        flavorText: "Oops, try again!",
+      }
     }
 
+    return tempState
+  }
 
+  // Checks whether or not an incorrect answer contains an article -- if it does, reminder text displays
+  articleTextCheck = (newState) => {
+    if (!newState.correct && newState.hasArticle) {
+      this.setState({ ...newState, articleText: "Remember, articles don't count!" })
+    } else {
+      this.setState({ ...newState, articleText: "" })
+    }
+  }
 
+  // Determines answer index to start check at, and then runs answerCheck and articleTextCheck
+  articleCheck = (answer) => {
+    let newStart = 0
+    let hasArticle = false
 
-
-
-    else {
-      console.log("try again, idiot!")
+    if (answer.startsWith('THE ')) {
+      newStart = 4
+    } else if (answer.startsWith('AN ')) {
+      newStart = 3
+    } else if (answer.startsWith('A ')) {
+      newStart = 2
     }
 
-    console.log(answer)
-    console.log(this.state.previousAnswer)
+    if (newStart !== 0) {
+      hasArticle = true
+    }
 
-
-
-
-
-
+    const newState = this.answerCheck(answer, newStart)
+    newState.hasArticle = hasArticle
+    this.articleTextCheck(newState)
   }
 
 
   render() {
-
     return(
-      <div>
-
-
-
-
-
-        <div>{this.state.category}</div>
-
-
-        <div><Form answerCheck={this.answerCheck} /></div>
-
-        <div>{this.state.flavorText}</div>
-
-        <div>{this.state.alreadyGuessed}</div>
-
+      <div className='text-center'>
+        <h2 className="pt-3">Tail Chase: Single-Player</h2>
+        <h3 className="py-4 mt-3 mb-2">Category: {this.state.category}</h3>
+        <div><Form articleCheck={this.articleCheck} /></div>
+        <h5 className="py-3">{this.state.flavorText}</h5>
+        <div>{this.state.articleText}</div>
+        <h5 className="mt-1">{this.state.alreadyGuessed.join(" || ")}</h5>
       </div>
-
-
     )
-
-
   }
-
 
 }
 
