@@ -84,7 +84,7 @@ class SinglePlayer extends Component {
         <h3 className="py-4 mt-3 mb-2">Category: {this.state.category}</h3>
         <div><Form articleCheck={this.articleCheck} /></div>
         <h5 className="py-3">{this.state.flavorText}</h5>
-        <div>{this.state.articleText}</div>
+        <h5 className="pb-2 mb-4">{this.state.articleText}</h5>
         <h5 className="mt-1">{this.state.alreadyGuessed.join(" || ")}</h5>
       </div>
     )
